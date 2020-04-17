@@ -1,26 +1,65 @@
 @startuml
+package paper <<Aggregate>>  {
 
-package order <<Aggregate>>  {
-
-    class Order <<Aggregate Root>> {
-        userId: String
-        updateOrderItemPrice()
-        updateAddress()
-        {static} create(): Order
+    class Paper <<Aggregate Root>> {
+        paperId: String
+        blankQuizzes: List
+        addBlankQuiz()
+        deleteBlankQuiz()
+        {static} create(): Paper
     }
 
-    class "Address" as a <<Value Object>>{
-        zipCode: String
-        detail: String
+    class "BlankQuiz" <<Value Object>>{
+        num: Integer
+        question: String
+        answer: String
+        score: int
     }
 
-    class OrderItem <<Entity>> {
-        quality: Number
-        price: Money
-    }
-
-    Order "1" *-- "1" a
-    Order "1" *-- "1..99" OrderItem
+    Paper "1" *-- "n" BlankQuiz
 }
 
+package examination <<Aggregate>>  {
+
+    class Examination <<Aggregate Root>> {
+        id: String
+        teacher: Teacher
+        students: List<Student>
+        paperId: String
+        addPaper()
+        deletePaper()
+        addStudent(student: Student)
+        {static} create(teacher: Teacher): Examination
+    }
+
+    class Teacher <<Value Object>> {
+        id: String
+    }
+
+    class Student <<Value Object>> {
+        id: String
+    }
+
+    Examination "1" *-- "1" Paper
+    Examination "1" *-- "1" Teacher
+    Examination "1" *-- "n" Student
+}
+
+package answer_sheet <<Aggregate>>  {
+
+    class AnswerSheet <<Aggregate Root>> {
+        id: String
+        student: Student
+        submit()
+        handIn()
+        sendOut()
+        {static} create(): AnswerSheet
+    }
+
+    class Student <<Value Object>> {
+        id: String
+    }
+
+    AnswerSheet "1" *-- "1" Student
+}
 @enduml
