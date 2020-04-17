@@ -1,0 +1,72 @@
+@startuml
+package user <<Aggregate>> {
+
+    class User <<Aggregate Root>> {
+        id: String
+        name: String
+    }
+}
+
+package paper <<Aggregate>>  {
+
+    class Paper <<Aggregate Root>> {
+        paperId: String
+        teacherId: String
+        updateBlankQuizzes()
+        {static} create(): Paper
+    }
+
+    class BlankQuiz <<Value Object>>{
+        num: Integer
+        question: String
+        answer: String
+        score: Integer
+    }
+
+    Paper "1" *-- "1" User
+    Paper "1" *-- "n" BlankQuiz
+}
+
+package examination <<Aggregate>>  {
+
+    class Examination <<Aggregate Root>> {
+        id: String
+        teacherId: String
+        studentIds: List<String>
+        paper: Paper
+        addPaper()
+        deletePaper()
+        addStudent(student: Student)
+        {static} create(): Examination
+    }
+
+    class Paper <<Value Object>> {
+        blankQuizzes: List<BlankQuiz>
+    }
+
+    class BlankQuiz <<Vale Object>>{
+        question: String
+        answer: String
+        score: Integer
+    }
+
+    Examination "1" *-- "1" Paper
+    Examination "1" *-- "1" User
+    Examination "1" *-- "n" User
+}
+
+package answer_sheet <<Aggregate>>  {
+
+    class AnswerSheet <<Aggregate Root>> {
+        id: String
+        studentId: String
+        score: Integer
+        submit()
+        handIn()
+        sendOut()
+        {static} create(): AnswerSheet
+    }
+
+    AnswerSheet "1" *-- "1" User
+}
+@enduml
