@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -16,14 +17,15 @@ import java.util.stream.IntStream;
  * @date 2020/4/17
 */
 public class PaperTest {
-
     private String fakeTeacherId = "fake-teacher-id";
-    private List quizzes = List.of(
-            new BlankQuiz(),
-            new BlankQuiz(),
-            new BlankQuiz(),
-            new BlankQuiz(),
-            new BlankQuiz());
+    private List<BlankQuiz> quizzes = List.of(
+            new BlankQuiz("q1", "a1", 5),
+            new BlankQuiz("q2", "a2", 5),
+            new BlankQuiz("q3", "a3", 5),
+            new BlankQuiz("q4", "a4", 5),
+            new BlankQuiz("q5", "a5", 5)
+    );
+    public static final Random RANDOM = new Random();
 
     @Test
     void should_create_paper() {
@@ -42,8 +44,10 @@ public class PaperTest {
     @Test
     void should_fail_when_create_paper_given_more_than_20_quiz() {
         List<BlankQuiz> blankQuizzes = IntStream.range(0, 25)
-                .mapToObj(i -> new BlankQuiz())
+                .mapToObj(i -> new BlankQuiz(
+                        String.valueOf(RANDOM.nextInt()), String.valueOf(RANDOM.nextInt()), RANDOM.nextInt()))
                 .collect(Collectors.toList());
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> Paper.create(new PaperId(), fakeTeacherId, blankQuizzes));
 
