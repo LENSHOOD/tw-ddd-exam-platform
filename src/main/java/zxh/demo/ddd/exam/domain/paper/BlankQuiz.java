@@ -30,4 +30,8 @@ public class BlankQuiz implements ValueObject {
     public int hashCode() {
         return Objects.hash(super.hashCode(), question, answer, score);
     }
+
+    public int judgeAnswer(String answer) {
+        return this.answer.equals(answer) ? score : 0;
+    }
 }
