@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -34,23 +35,34 @@ public class PaperTest {
     }
 
     @Test
-    void should_fail_when_create_paper_given_less_than_5_quiz() {
+    void should_fail_when_validate_blank_quizzes_given_less_than_5_quiz() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> Paper.create(new PaperId(), fakeTeacherId, List.of()));
+                () -> Paper.validateBlankQuizzes(List.of()));
 
         assertThat("Given quizzes less than 5.", is(exception.getMessage()));
     }
 
     @Test
-    void should_fail_when_create_paper_given_more_than_20_quiz() {
+    void should_fail_when_validate_blank_quizzes_given_more_than_20_quiz() {
         List<BlankQuiz> blankQuizzes = IntStream.range(0, 25)
                 .mapToObj(i -> new BlankQuiz(
                         String.valueOf(RANDOM.nextInt()), String.valueOf(RANDOM.nextInt()), RANDOM.nextInt()))
                 .collect(Collectors.toList());
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> Paper.create(new PaperId(), fakeTeacherId, blankQuizzes));
+                () -> Paper.validateBlankQuizzes(blankQuizzes));
 
         assertThat("Given quizzes more than 20.", is(exception.getMessage()));
+    }
+
+    @Test
+    void should_update_blank_quizzes() {
+        Paper paper = Paper.create(new PaperId(), fakeTeacherId, quizzes);
+        ArrayList<BlankQuiz> newBlankQuizs = new ArrayList<>(quizzes);
+        newBlankQuizs.add(new BlankQuiz("q5", "a5", 5));
+
+        paper.updateBlankQuizzes(newBlankQuizs);
+
+        assertThat(paper.getBlankQuizzes().size(), is(6));
     }
 }
