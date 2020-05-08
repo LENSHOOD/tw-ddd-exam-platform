@@ -1,8 +1,8 @@
 package zxh.demo.ddd.exam.application;
 
 import zxh.demo.ddd.exam.application.request.AssemblePaperRequest;
-import zxh.demo.ddd.exam.domain.paper.PaperRepository;
 import zxh.demo.ddd.exam.domain.paper.PaperService;
+import zxh.demo.ddd.exam.infrastructure.paper.PaperRepositoryImpl;
 
 /**
  * PaperService:
@@ -12,8 +12,8 @@ import zxh.demo.ddd.exam.domain.paper.PaperService;
 public class EditPaperUseCase {
     private final PaperService paperService;
 
-    public EditPaperUseCase(PaperRepository paperRepository) {
-        this.paperService = new PaperService(paperRepository);
+    public EditPaperUseCase() {
+        this.paperService = new PaperService(new PaperRepositoryImpl());
     }
 
     public void assemblePaper(AssemblePaperRequest request) {
