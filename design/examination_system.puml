@@ -1,72 +1,104 @@
 @startuml
-package user <<Aggregate>> {
-
-    class User <<Aggregate Root>> {
-        id: String
-        name: String
+package course <<Aggregate>> {
+    class Course <<Aggregate Root>> {
+        id: CourseId
+        videos: List<Video>
+        examinationId: ExaminationId
+        teacherId: TeacherId
+        ---
+        create(videos: List<Video>, ExaminationId examinationId): Course
+        update(videos: List<Video>, ExaminationId examinationId): void
+        publish(): void
     }
+
+    class Video <<Value Object>> {
+        url: URL
+    }
+
+    Course "1" *--> "n" Video
 }
 
-package paper <<Aggregate>>  {
+package quizBank <<Aggregate>> {
+    class QuizBank <<Aggregate Root>> {
+        id: QuizBankId
+        blankQuizzes: List<BlankQuiz>
+        ---
+        create(blankQuizzes: List<BlankQuiz>): QuizBank
+        update(blankQuizzes: List<BlankQuiz>): void
+    }
 
+    class BlankQuiz <<Value Object>> {
+        description: String
+        referenceAnswer: String
+        score: int
+        ---
+        judge(answer: Answer): void
+        getScore(): int
+    }
+
+    QuizBank "1" *--> "n" BlankQuiz
+}
+
+package paper <<Aggregate>> {
     class Paper <<Aggregate Root>> {
-        paperId: String
-        teacherId: String
-        updateBlankQuizzes()
-        {static} create(): Paper
+        id: PaperId
+        blankQuizzes: List<BlankQuiz>
+        teacherId: TeacherId
+        ---
+        assemble(blankQuizzes: List<BlankQuiz>): Paper
+        reassemble(blankQuizzes: List<BlankQuiz>): void
     }
 
-    class BlankQuiz <<Value Object>>{
-        num: Integer
-        question: String
-        answer: String
-        score: Integer
-    }
-
-    Paper "1" *-- "1" User
-    Paper "1" *-- "n" BlankQuiz
+    Paper "1" *--> "n" BlankQuiz
 }
 
-package examination <<Aggregate>>  {
-
-    class Examination <<Aggregate Root>> {
-        id: String
-        teacherId: String
-        studentIds: List<String>
-        paper: Paper
-        addPaper()
-        deletePaper()
-        addStudent(student: Student)
-        {static} create(): Examination
+package answerSheet <<Aggregate>> {
+    class AnswerSheet <<Aggregate Root>> {
+        id: AnswerSheetId
+        studentId: studentId
+        answers: List<Answer>
+        totalScore: int
+        ---
+        sendOut(): AnswerSheet
+        submit(answer: Answer): void
+        handIn(): void
+        review(): int
     }
 
-    class Paper <<Value Object>> {
+    class Answer <<Value Object>> {
+        answer: String
+    }
+
+    AnswerSheet "1" *--> "n" Answer
+}
+
+package examination <<Aggregate>> {
+    class Examination <<Aggregate Root>> {
+        id: ExaminationId
+        teacherId: TeacherId
+        paperTemplate: PaperTemplate
+        answerSheets: List<AnswerSheet>
+        dueDate: Date
+        timeLimit: Hour
+        totalScore: int
+        ---
+        create(paperTemplate: PaperTemplate): Examination
+        start(): AnswerSheet
+        end(answerSheet: AnswerSheet): CertificationId
+    }
+
+    class PaperTemplate <<Value Object>> {
         blankQuizzes: List<BlankQuiz>
     }
 
-    class BlankQuiz <<Vale Object>>{
-        question: String
-        answer: String
-        score: Integer
-    }
-
-    Examination "1" *-- "1" Paper
-    Examination "1" *-- "1" User
-    Examination "1" *-- "n" User
+    Examination "1" *--> "1" PaperTemplate
 }
 
-package answer_sheet <<Aggregate>>  {
-
-    class AnswerSheet <<Aggregate Root>> {
-        id: String
-        studentId: String
-        score: Integer
-        submit()
-        handIn()
-        sendOut()
-        {static} create(): AnswerSheet
+package certification <<Aggregate>> {
+    class Certification <<Aggregate Root>> {
+        id: CertificationId
+        ---
+        generate(): Certification
     }
-
-    AnswerSheet "1" *-- "1" User
 }
 @enduml
