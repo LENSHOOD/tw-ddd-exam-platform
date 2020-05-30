@@ -1,7 +1,8 @@
 package zxh.demo.ddd.exam.context.paper.application;
 
 import zxh.demo.ddd.exam.context.paper.application.request.AssemblePaperRequest;
-import zxh.demo.ddd.exam.context.paper.domain.model.paper.PaperService;
+import zxh.demo.ddd.exam.context.paper.domain.model.paper.Paper;
+import zxh.demo.ddd.exam.context.paper.domain.model.paper.PaperRepository;
 import zxh.demo.ddd.exam.context.paper.infrastructure.PaperRepositoryImpl;
 
 /**
@@ -10,13 +11,14 @@ import zxh.demo.ddd.exam.context.paper.infrastructure.PaperRepositoryImpl;
  * @date 2020/5/8
 */
 public class EditPaperUseCase {
-    private final PaperService paperService;
+    private final PaperRepository paperRepository;
 
     public EditPaperUseCase() {
-        this.paperService = new PaperService(new PaperRepositoryImpl());
+        paperRepository = new PaperRepositoryImpl();
     }
 
     public void assemblePaper(AssemblePaperRequest request) {
-        paperService.create(request.getTeacherId(), request.getBlankQuizzes());
+        Paper paper = Paper.create(paperRepository.nextId(), request.getTeacherId(), request.getBlankQuizzes());
+        paperRepository.save(paper);
     }
 }
