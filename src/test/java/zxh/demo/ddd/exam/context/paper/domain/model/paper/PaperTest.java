@@ -30,7 +30,7 @@ public class PaperTest {
 
     @Test
     void should_create_paper() {
-        Paper paper = Paper.create(new PaperId(), fakeTeacherId, quizzes);
+        Paper paper = Paper.create(new PaperId("id"), fakeTeacherId, quizzes);
         assertThat(paper, notNullValue());
     }
 
@@ -57,7 +57,7 @@ public class PaperTest {
 
     @Test
     void should_update_blank_quizzes() {
-        Paper paper = Paper.create(new PaperId(), fakeTeacherId, quizzes);
+        Paper paper = Paper.create(new PaperId("id"), fakeTeacherId, quizzes);
         ArrayList<BlankQuiz> newBlankQuizs = new ArrayList<>(quizzes);
         newBlankQuizs.add(new BlankQuiz("q5", "a5", 5));
 
