@@ -25,13 +25,17 @@ package quizBank <<Aggregate>> {
         ---
         create(blankQuizzes: List<BlankQuiz>): QuizBank
         update(blankQuizzes: List<BlankQuiz>): void
+        saveQuiz(blankQuiz: BlankQuiz)
+        removeQuiz(id: BlankQuizId)
     }
 
-    class BlankQuiz <<Value Object>> {
+    class BlankQuiz <<Entity>> {
+        id: BlankQuizId
         description: String
         referenceAnswer: String
         score: int
         ---
+        create(id: BlankQuizId, description: String, referenceAnswer: String, score: int): BlankQuiz
         judge(answer: Answer): void
         getScore(): int
     }

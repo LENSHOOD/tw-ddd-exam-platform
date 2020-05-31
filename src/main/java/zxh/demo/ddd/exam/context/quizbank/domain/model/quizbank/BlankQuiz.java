@@ -4,7 +4,7 @@ import static java.util.Objects.isNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import zxh.demo.ddd.exam.context.quizbank.domain.share.ValueObject;
+import zxh.demo.ddd.exam.context.quizbank.domain.share.Entity;
 
 /**
  * BlankQuiz:
@@ -13,9 +13,10 @@ import zxh.demo.ddd.exam.context.quizbank.domain.share.ValueObject;
 */
 @AllArgsConstructor
 @Getter
-public class BlankQuiz implements ValueObject {
+public class BlankQuiz implements Entity {
     private static final int CORRECT_SCORE = 5;
     private static final int WRONG_SCORE = 0;
+    private final BlankQuizId id;
     private String description;
     private String referencedAnswer;
     private int score;

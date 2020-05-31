@@ -9,9 +9,10 @@ class BlankQuizTest {
     @Test
     void should_judge_correct_answer() {
         // given
+        BlankQuizId id = new BlankQuizId("id");
         String description = "test-blank-quiz";
         String referencedAnswer = "correct";
-        BlankQuiz blankQuiz = new BlankQuiz(description, referencedAnswer, 5);
+        BlankQuiz blankQuiz = new BlankQuiz(id, description, referencedAnswer, 5);
 
         // when
         blankQuiz.judge(new Answer("correct"));
@@ -25,7 +26,8 @@ class BlankQuizTest {
         // given
         String description = "test-blank-quiz";
         String referencedAnswer = "correct";
-        BlankQuiz blankQuiz = new BlankQuiz(description, referencedAnswer, 5);
+        BlankQuizId id = new BlankQuizId("id");
+        BlankQuiz blankQuiz = new BlankQuiz(id, description, referencedAnswer, 5);
 
         // when
         blankQuiz.judge(new Answer("wrong"));

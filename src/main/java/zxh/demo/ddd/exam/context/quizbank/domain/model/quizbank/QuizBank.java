@@ -3,7 +3,9 @@ package zxh.demo.ddd.exam.context.quizbank.domain.model.quizbank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import zxh.demo.ddd.exam.context.quizbank.domain.share.Entity;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * QuizBank:
@@ -12,7 +14,7 @@ import java.util.List;
 */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class QuizBank {
+public class QuizBank implements Entity {
     private QuizBankId id;
     private List<BlankQuiz> blankQuizzes;
 
@@ -22,5 +24,18 @@ public class QuizBank {
 
     public void update(List<BlankQuiz> blankQuizzes) {
         this.blankQuizzes = blankQuizzes;
+    }
+
+    public void saveBlankQuiz(BlankQuiz blankQuiz) {
+        removeBlankQuiz(blankQuiz.getId());
+        blankQuizzes.add(blankQuiz);
+    }
+
+    public Optional<BlankQuiz> findBlankQuiz(BlankQuizId blankQuizId) {
+        return blankQuizzes.stream().filter(innerQuiz -> innerQuiz.getId().equals(blankQuizId)).findAny();
+    }
+
+    public void removeBlankQuiz(BlankQuizId blankQuizId) {
+        blankQuizzes.removeIf(innerQuiz -> innerQuiz.getId().equals(blankQuizId));
     }
 }

@@ -27,7 +27,7 @@ class QuizBankOperationUseCaseTest {
     void should_update_QuizBank() {
         // given
         QuizBankId id = new QuizBankId("id");
-        List<BlankQuiz> blankQuizzes = Lists.newArrayList(new BlankQuiz("quiz1", "correct", 5));
+        List<BlankQuiz> blankQuizzes = Lists.newArrayList(new BlankQuiz(new BlankQuizId("id1"), "quiz1", "correct", 5));
         UpdateQuizBankCommand command = new UpdateQuizBankCommand(id, blankQuizzes);
 
         QuizBank quizBank = QuizBank.create(id, blankQuizzes);
