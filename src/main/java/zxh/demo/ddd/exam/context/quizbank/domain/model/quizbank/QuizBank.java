@@ -1,5 +1,6 @@
 package zxh.demo.ddd.exam.context.quizbank.domain.model.quizbank;
 
+import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,5 +38,9 @@ public class QuizBank implements Entity {
 
     public void removeBlankQuiz(BlankQuizId blankQuizId) {
         blankQuizzes.removeIf(innerQuiz -> innerQuiz.getId().equals(blankQuizId));
+    }
+
+    public List<BlankQuiz> getBlankQuizzes() {
+        return ImmutableList.copyOf(blankQuizzes);
     }
 }
