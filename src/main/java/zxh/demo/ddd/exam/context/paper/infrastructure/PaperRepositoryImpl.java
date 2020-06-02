@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import zxh.demo.ddd.exam.context.paper.domain.model.paper.Paper;
 import zxh.demo.ddd.exam.context.paper.domain.model.paper.PaperId;
 import zxh.demo.ddd.exam.context.paper.domain.model.paper.PaperRepository;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,5 +25,9 @@ public class PaperRepositoryImpl implements PaperRepository {
     @Override
     public PaperId nextId() {
         return new PaperId(UUID.randomUUID().toString());
+    }
+
+    public List<Paper> getAll() {
+        return new ArrayList<>(paperDb.values());
     }
 }
