@@ -23,6 +23,7 @@ repositories {
 }
 
 dependencies {
+    compile 'io.vertx:vertx-web:3.9.1'
     // This dependency is found on compile classpath of this component and consumers.
     implementation 'com.google.guava:guava:27.0.1-jre'
 
